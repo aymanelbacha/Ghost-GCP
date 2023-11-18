@@ -187,3 +187,4 @@ Do you wish to set up Systemd? Yes
 Do you want to start Ghost? (Y/n) Y
 
 # You will obtain the URL to access the Ghost Interface once the installation is finished.
+You can run "ghost ls" to check the status of the App
