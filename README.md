@@ -13,6 +13,7 @@ Do you want a beautiful content editor and a mobile-friendly control panel to ho
 Access through CLI console on the top right corner side or
 Install the gcloud CLI depending on your environment
 https://cloud.google.com/sdk/docs/install
+(we are using CF here instead as Cloud DNS in GCP took time to get published, we wanted to make sure our Instance is working fine thus we used CF)
 
 ### Initialize account
 ```gcloud
@@ -69,14 +70,14 @@ gcloud compute resource-policies create snapshot-schedule schedule-1 --project=g
 ```
 
 ## Configure the domain
-### Buy a domain and set up Cloudflare
+### Buy a domain and set up Cloudflare 
 1. Make a Namecheap account and buy your domain. I’ll use "aymanelbacha.pro" as an example.
 2. Make a Cloudflare account and add your domain under the Free subscription plan.
 3. Under “Review your DNS records”, first delete all the records.
 4. Then Add record:
 Type: A
 Name: https://www.aymanelbacha.pro/
-IPv4 address: your external IP address
+IPv4 address: your external IP address -> (gcloud compute instances describe ghost-web-server-1 --format="value(networkInterfaces[0].accessConfigs[0].natIP))
 Proxy status: DNS only
 Save > Continue > Confirm.
 5. Go back to Namecheap > aymanelbacha.pro > Manage > Nameservers > Custom DNS and input the specified Cloudflare nameservers.
@@ -221,8 +222,75 @@ Do you wish to set up Systemd? Yes
 
 Do you want to start Ghost? (Y/n) Y
 
-# You will obtain the URL to access the Ghost Interface once the installation is finished.
+## You will obtain the URL to access the Ghost Interface once the installation is finished.
 You can run "ghost ls" to check the status of the App
 
+## Maintenance
+
+Create an update script in the home directory of service_user that runs every Wednesday midnight:
+```
+cd && sudo nano update-script.sh
+```
+Paste the following text into the update script:
+```
+#!/bin/bash
+
+sudo apt update && sudo apt -y upgrade
+sudo apt clean && sudo apt autoclean && sudo apt autoremove
+sudo npm install -g npm@latest
+cd /var/www/ghost
+sudo npm install -g ghost-cli@latest
+ghost backup
+ghost stop
+ghost update
+ghost ls
+```
+Make it executable:
+```
+sudo chown service_usert:service_usert update-script.sh
+sudo chmod 775 update-script.sh
+```
+create a cron job that runs every Sunday midnight to execute a script, follow these steps:
+
+Create the cron job file: Open a text editor and create a new file. 
+Save the file with the .cron extension, for example, my_wed_script.cron.
+
+Specify the cron job schedule: In the cron job file, add the following line to define the schedule for the cron job:
+
+0 0 * * sun
+This line indicates that the cron job should run every Wed at midnight.
+
+Specify the script path: Add the following line to the cron job file to specify the path of the script you want to execute:
+/path/to/your/update-script.sh
+Replace /path/to/your/script.sh with the actual path to your script file.
+
+Save the cron job file: Save the cron job file to the appropriate location. 
+The default location for cron jobs on Linux systems is /etc/cron.d.
+
+Restart the cron daemon: To ensure the cron daemon is aware of the new cron job, restart it using the following command:
+
+```
+sudo service cron restart
+```
+
+
+
+## Security & Monitoring (GUI)
+### Apply FW policies (hardening)
+
+
+### Web Scan
+It is recommended to keep scanning your web for vulenerabilities, using Web Scan service
 ![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/66a4fc8e-73a6-4d6f-ac5f-58cb032504f3)
+
+### Monitoring and Notifications
+Due to the fact RESTAPI wasn't working, we are showcasing how it's done from the portal (attached json file FYI)
+ <p>The requested URL <code>/v3/projects/ghost-blog1/alertPoliciescurl</code> was not found on this server.  <ins>That’s all we know.</ins>
+    
+## Future Projects
+1.Deploying on App Engine
+2.Automate through Cloud Build/Functions ghost updates without running manual scripts 
+3.Automate the monitoring/Web Scanning and send notifications about the overall status  
+
+If you spot errors, vulnerabilities, or potential improvements, please do open a pull request !!!
 
