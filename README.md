@@ -1,5 +1,5 @@
 # Why Ghost on GCP
-         ![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/fe923ca3-2e56-405c-a420-856d545b832e)
+![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/fe923ca3-2e56-405c-a420-856d545b832e)
 
 Do you want a beautiful content editor and a mobile-friendly control panel to host your blogs with minimum cost. instead of using Ghost managed hosting plans for a fee, while you can host Ghost (the blog engine) with its open-source and free image on GCP with few click and automaintenaned.
 
@@ -15,40 +15,58 @@ Install the gcloud CLI depending on your environment
 https://cloud.google.com/sdk/docs/install
 
 ### Initialize account
+```gcloud
 gcloud init
+```
 
 ### Log in to the Google account
+```gcloud
 gcloud auth login
+```
 
 ### Activate Google Cloud
+```
 gcloud auth application-default login
+```
 
 ### Create a project
+```
 gcloud projects create ghost-blog1 --name="Ghost Blog"
+```
 
 ### Set the project as default
+```
 gcloud config set project ghost-blog1
+```
 
 ### Activate Free Trial
 #### List the existing account then Past it next to "billing-account"
+```
 gcloud billing accounts list
 
 gcloud alpha billing projects link ghost-blog1 --billing-account=01F1E5-A51062-A52062
+```
 
 ### Enable Compute Engine API
+```
 gcloud services enable compute.googleapis.com
+```
 
 ### Create Instance Template (2 vCPU (1 shared core) Memory 4 GB, Disk 10 GB)
+```
 gcloud compute instance-templates create free-web-server  --machine-type=e2-medium --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=free-web-server --tags=http-server,https-server --image-family=ubuntu-2204-lts --image-project=ubuntu-os-cloud --shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any
+```
 
 
 ### Create VM Instance
+```
 gcloud compute instances create ghost-blog-instance --source-instance-template=free-web-server --reservation us-central1 --zone us-central1-a
-
+```
 
 ### Create Snapshot Schedule
+```
 gcloud compute resource-policies create snapshot-schedule schedule-1 --project=ghost-blog1 --region=us-central1 --max-retention-days=14 --on-source-disk-delete=apply-retention-policy --daily-schedule  --start-time=03:00 --storage-location=us --guest-flush
-
+```
 
 ## Configure the domain
 ### Buy a domain and set up Cloudflare
@@ -70,37 +88,37 @@ Save > Continue > Confirm.
 1. Go back to Google Cloud > Compute Engine > VM Instances > ghost-blog > SSH. A virtual terminal (“cloud shell”) will appear in a pop-up window or access it through your desktop SDK via gcloud compute ssh ghost-blog-instance
 
 2. First, set a password for the root user:
-   
+```bash
 sudo passwd
-
-4. Switch to root user and authenticate:
-   
+```
+3. Switch to root user and authenticate:
+```bash
 su
-
+```
 4.Update Linux:
-
+```bash
 apt update && apt -y upgrade
-
+```
 5.To allow any updated services to restart, go back to Google Cloud, Stop and Resume the instance, then SSH again.
 
 6. Make a new user called service_user and grant it sudo:
-
+```bash                           
 adduser service_user && usermod -aG sudo service_user
-
+```
 Set a password for service_user. 
 Leave all user information fields for service_user at default values. 
 Confirm with Y.
 
 7. Switch to service_user:
-
+```
 su - service_user
-
+```
 ### Install Ghost dependencies
 1. Install Nginx and open the firewall:
 sudo apt install -y nginx && sudo ufw allow 'Nginx Full'
 
 2. Install NodeJS:
-
+```
 sudo apt update
 sudo apt install -y ca-certificates curl gnupg
 sudo mkdir -p /etc/apt/keyrings
@@ -114,28 +132,31 @@ sudo apt update
 sudo apt install nodejs -y
 
 sudo npm install -g npm@latest
-
+```
 3. Install MySQL:
+```
 sudo apt install -y mysql-server
-
+```
 Login to MySQL first:
-
+```
 sudo mysql
+```
 Set root password:
 
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password by 'MyPassword@123';
+ALTER USER ```'root'@'localhost' IDENTIFIED WITH mysql_native_password by 'MyPassword@123';```
 ℹ️
 You should replace MyPassword@123 with a secure password that you create.
 
 Exit:
+```
 exit;
-
+```
 Secure your Database Installation:
 
 Use the provided command and adhere to the wizard's instructions to secure our Database instance:
-
+```
 sudo mysql_secure_installation
-
+```
 The script will ask these questions.
 
 By typing your chosen password and pressing Enter, you can enter the user root password.
@@ -152,36 +173,36 @@ Now reload the privilege tables? Hit Y, then hit ENTER.
 4. Create a Database for Ghost CMS
    
 Use the root user's password you created for your database server to log in.
-
+```
 sudo mysql -u root -p
-
+```
 To create a new database, execute the command. But don't forget to change new_user to whatever name you want to give your database user, and new_db to whatever name you want to give your database, along with your_password for the password.
-
+```
 CREATE USER 'new_user'@'localhost' IDENTIFIED BY 'your_password';
 CREATE DATABASE new_db;
 GRANT ALL PRIVILEGES ON new_db.* TO 'new_user'@'localhost';
 FLUSH PRIVILEGES;
 Exit;
-
+```
 
 6. Install Ghost CLI on Ubuntu 22.04
    
 Since Node.js and its package manager NPM are already installed, we can quickly install the Ghost CMS on our Ubuntu 22.04 LTS server.
-
+```
 sudo npm install ghost-cli@latest -g
-
+```
 7. Create a directory for Ghost files
-
+```
 sudo mkdir /var/www/ghost
 
 sudo chown service_user:service_user /var/www/ghost
 
 sudo chmod 775 /var/www/ghost
-
+```
 8. Use the CLI tool to install Ghost CMS.
-   
+ ```  
 cd /var/www/ghost && ghost install
-
+```
 Some questions will be posed to you by the aforementioned command:
 
 Enter your blog URL: https://www.aymanelbacha.pro/
