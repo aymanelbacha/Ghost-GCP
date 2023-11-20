@@ -240,11 +240,12 @@ steps:
     args:
       - compute
       - ssh
-      - >-
-        ghost-web-server-1 '--command=cd /var/www/ghost' '--command=sudo npm
-        install -g ghost-cli@latest'
+      - ghost-web-server-1
+      - '--command=cd /var/www/ghost'
+      - '--command=sudo npm'
+      - '--command=install -g ghost-cli@latest'
       - '--command=ghost update'
-      - '--project=ghost-blog1'
+    project: ghost-blog1
 ```
 
 
@@ -311,16 +312,16 @@ It is recommended to keep scanning your web for vulenerabilities, using Web Scan
 ### Monitoring and Notifications
 Due to the fact RESTAPI wasn't working, we are showcasing how it's done from the portal (attached json file FYI)
 
- <p>The requested URL <code>/v3/projects/ghost-blog1/alertPoliciescurl</code> was not found on this server.  
+ Error: The requested URL was not found on this server.  
 
-    Create Alert:
+Create Alert:
  ![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/eb031a10-44a2-4306-82b1-3386cc0400bf)
 
-     Create Condition trigger:
+Create Condition trigger:
 
  ![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/24901f5c-a159-499c-a518-2bb740b3e518)
  
-     Create Notification channel (SMS,Email..):
+Create Notification channel (SMS,Email..):
 
  ![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/b29c6c77-c63f-4f79-a7f4-0179d9f1695c)
 
