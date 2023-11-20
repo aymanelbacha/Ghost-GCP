@@ -1,0 +1,11 @@
+steps:
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      - compute
+      - ssh
+      - ghost-web-server-1
+      - '--command=cd /var/www/ghost'
+      - '--command=sudo npm'
+      - '--command=install -g ghost-cli@latest'
+      - '--command=ghost update'
+      - '--project=: ghost-blog1'
