@@ -1,7 +1,7 @@
 # Why Ghost on GCP
 ![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/fe923ca3-2e56-405c-a420-856d545b832e)
 
-Do you want a beautiful content editor and a mobile-friendly control panel to host your blogs with minimum cost. instead of using Ghost managed hosting plans for a fee, while you can host Ghost (the blog engine) with its open-source and free image on GCP with few click and automaintenaned.
+Do you want a beautiful content editor and a mobile-friendly control panel to host your blogs with minimum cost. instead of using Ghost managed hosting plans for a fee, while you can host Ghost (the blog engine) with its open-source and free image on GCP with few clicks and autoupdates.
 
 ## GCP-Ghost Workflow Diagram
 ![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/9ea2616a-9d41-43d8-9502-5d19f2faffb9)
@@ -13,7 +13,6 @@ Do you want a beautiful content editor and a mobile-friendly control panel to ho
 Access through CLI console on the top right corner side or
 Install the gcloud CLI depending on your environment
 https://cloud.google.com/sdk/docs/install
-(we are using CF here instead as Cloud DNS in GCP took time to get published, we wanted to make sure our Instance is working fine thus we used CF)
 
 ### Initialize account
 ```gcloud
@@ -245,7 +244,7 @@ steps:
       - '--command=sudo npm'
       - '--command=install -g ghost-cli@latest'
       - '--command=ghost update'
-    project: ghost-blog1
+      - project: ghost-blog1
 ```
 
 
@@ -326,16 +325,22 @@ Create Notification channel (SMS,Email..):
  ![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/b29c6c77-c63f-4f79-a7f4-0179d9f1695c)
 
 
+## Make it Fast
+![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/7b3d4875-6fb9-450c-9ef9-49133863612c)
+
+
+Result
+![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/d9b89723-4ca6-43f5-936b-24cb8cd415a3)
 
 
  
     
 ## Future Projects
-1.Deploying on App Engine
+1.Deploying on App Engine.
 
-2.Automate through Cloud Build/Functions ghost updates without running manual scripts 
+2.Update my ghost website content directly from github (based on CI/CD Cloud Build)
 
-3.Automate the monitoring/Web Scanning and send notifications about the overall status  
+3.Automate the monitoring/Web Scanning and sending notifications about the overall status  
 
 
 If you spot errors, vulnerabilities, or potential improvements, please do open a pull request !!!
