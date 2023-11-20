@@ -4,7 +4,7 @@
 Do you want a beautiful content editor and a mobile-friendly control panel to host your blogs with minimum cost. instead of using Ghost managed hosting plans for a fee, while you can host Ghost (the blog engine) with its open-source and free image on GCP with few clicks and autoupdates.
 
 ## GCP-Ghost Workflow Diagram
-![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/9ea2616a-9d41-43d8-9502-5d19f2faffb9)
+![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/6a0adc77-7105-4fb9-b13e-1275f460d3b6)
 
 
 ## Set up Google Cloud
