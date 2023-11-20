@@ -225,7 +225,30 @@ Do you want to start Ghost? (Y/n) Y
 ## You will obtain the URL to access the Ghost Interface once the installation is finished.
 You can run "ghost ls" to check the status of the App
 
-## Maintenance
+## Maintenance via Cloud Build (option1):
+### Create a trigger based on new Tag
+![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/7dac95f0-436d-4119-8993-31d29bd972ac)
+
+### Create a Regex to filter upcoming releases
+
+![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/381c295a-3cb8-4312-80c3-e7e7d97aaec6)
+
+### Create a build yaml file
+```yaml
+steps:
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      - compute
+      - ssh
+      - >-
+        ghost-web-server-1 '--command=cd /var/www/ghost' '--command=sudo npm
+        install -g ghost-cli@latest'
+      - '--command=ghost update'
+      - '--project=ghost-blog1'
+```
+
+
+## Maintenance via script (option 2):
 
 Create an update script in the home directory of service_user that runs every Wednesday midnight:
 ```
@@ -287,7 +310,22 @@ It is recommended to keep scanning your web for vulenerabilities, using Web Scan
 
 ### Monitoring and Notifications
 Due to the fact RESTAPI wasn't working, we are showcasing how it's done from the portal (attached json file FYI)
- <p>The requested URL <code>/v3/projects/ghost-blog1/alertPoliciescurl</code> was not found on this server.  <ins>That’s all we know.</ins>
+
+ <p>The requested URL <code>/v3/projects/ghost-blog1/alertPoliciescurl</code> was not found on this server.  
+
+    Create Alert:
+ ![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/eb031a10-44a2-4306-82b1-3386cc0400bf)
+
+     Create Condition trigger:
+
+ ![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/24901f5c-a159-499c-a518-2bb740b3e518)
+ 
+     Create Notification channel (SMS,Email..):
+
+ ![image](https://github.com/aymanelbacha/Ghost-GCP/assets/123943459/b29c6c77-c63f-4f79-a7f4-0179d9f1695c)
+
+
+
 
  
     
