@@ -277,7 +277,9 @@ sudo service cron restart
 
 ## Security & Monitoring (GUI)
 ### Apply FW policies (hardening)
+gcloud compute --project=ghost-blog1 firewall-rules create allow-only-https --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:443 --source-ranges=0.0.0.0/0 --target-tags=https --enable-logging
 
+gcloud compute --project=ghost-blog1 firewall-rules create deny-all --direction=INGRESS --priority=1000 --network=default --action=DENY --rules=all --source-ranges=0.0.0.0/0 --enable-logging
 
 ### Web Scan
 It is recommended to keep scanning your web for vulenerabilities, using Web Scan service
@@ -286,11 +288,16 @@ It is recommended to keep scanning your web for vulenerabilities, using Web Scan
 ### Monitoring and Notifications
 Due to the fact RESTAPI wasn't working, we are showcasing how it's done from the portal (attached json file FYI)
  <p>The requested URL <code>/v3/projects/ghost-blog1/alertPoliciescurl</code> was not found on this server.  <ins>That’s all we know.</ins>
+
+ 
     
 ## Future Projects
 1.Deploying on App Engine
+
 2.Automate through Cloud Build/Functions ghost updates without running manual scripts 
+
 3.Automate the monitoring/Web Scanning and send notifications about the overall status  
+
 
 If you spot errors, vulnerabilities, or potential improvements, please do open a pull request !!!
 
