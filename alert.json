@@ -1,0 +1,22 @@
+{
+  "displayName": "CPU Utilization Alert",
+  "conditions": [
+    {
+      "displayName": "CPU Utilization > 90%",
+      "duration": "1m",
+      "if": "> 0.9"
+    }
+  ],
+  "notificationChannels": [
+    {
+      "type": "EMAIL",
+      "email": "ayman.h.elbacha@gmail.com"
+    }
+  ],
+  "aggregation": {
+    "alignmentPeriod": "60s",
+    "perSeriesAligner": "ALIGN_MEAN"
+  },
+  "combiner": "OR",
+  "alertSeverity": "CRITICAL"
+}'
